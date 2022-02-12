@@ -34,5 +34,5 @@ jobs:
       - name: Build
         shell: msys2 {0}
         run: |
-          cmake -B build -DCMAKE_BUILD_TYPE=Release
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles"
           cmake --build build
