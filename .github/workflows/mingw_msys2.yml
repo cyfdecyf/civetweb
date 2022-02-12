@@ -1,7 +1,7 @@
 name: MingW (Msys2)
 
 on:
-  pull_request:
+  push:
     branches:
       - debug
 
