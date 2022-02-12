@@ -1,0 +1,37 @@
+name: MingW (Msys2)
+
+on:
+  pull_request:
+    branches:
+      - debug
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include: [
+            { msystem: MINGW64, kind: static, arch: x86_64, prefix: /mingw64 },
+            { msystem: MINGW64, kind: shared, arch: x86_64, prefix: /mingw64 },
+        ]
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+
+      - name: setup
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{ matrix.msystem }}
+          update: true
+          install: git make base-devel
+          pacboy: >-
+            toolchain:p
+            cmake:p
+
+      - name: Build
+        shell: msys2 {0}
+        run: |
+          cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build
