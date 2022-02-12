@@ -38,6 +38,7 @@ macro(REMOVE_DUPLICATE_PATHS LIST_VAR)
 endmacro(REMOVE_DUPLICATE_PATHS)
 
 set(WINSOCK_INCLUDE_PATHS "${WINSOCK_ROOT}/include/")
+message(STATUS "WINSOCK_ROOT ${WINSOCK_ROOT}")
 if(MINGW)
   file(TOUCH ${CMAKE_BINARY_DIR}/nul)
   execute_process(
@@ -47,6 +48,7 @@ if(MINGW)
     ERROR_VARIABLE ERR
     OUTPUT_QUIET
   )
+  message(STATUS "include ERR ${ERR}")
   if (NOT RESULT)
     string(FIND "${ERR}" "#include <...> search starts here:" START)
     string(FIND "${ERR}" "End of search list." END)
@@ -61,6 +63,7 @@ if(MINGW)
   endif()
 endif()
 remove_duplicate_paths(WINSOCK_INCLUDE_PATHS)
+message(STATUS "include path ${WINSOCK_INCLUDE_PATHS}")
 
 set(WINSOCK_LIBRARY_PATHS "${WINSOCK_ROOT}/lib/")
 if(MINGW)
@@ -70,6 +73,7 @@ if(MINGW)
     OUTPUT_VARIABLE OUT
     ERROR_QUIET
   )
+  message(STATUS "searchdir OUTPUT_VARIABLE ${OUTPUT_VARIABLE}")
   if (NOT RESULT)
     string(REGEX MATCH "libraries: =([^\r\n]*)" OUT "${OUT}")
     string(REPLACE ":" ";" _WINSOCK_LIBRARY_PATH "${CMAKE_MATCH_1}")
@@ -82,15 +86,18 @@ if ("${CMAKE_HOST_SYSTEM_PROCESSOR}" STREQUAL "AMD64" AND "${CMAKE_SIZEOF_VOID_P
 endif()
 list(APPEND WINSOCK_LIBRARY_PATHS "C:/Windows/System32")
 remove_duplicate_paths(WINSOCK_LIBRARY_PATHS)
+message(STATUS "WINSOCK_LIBRARY_PATHS ${WINSOCK_LIBRARY_PATHS}")
 
 find_path(WINSOCK_INCLUDE_DIRS
   NAMES winsock2.h
   PATHS ${WINSOCK_INCLUDE_PATHS}
 )
+message(STATUS "WINSOCK_INCLUDE_DIRS ${WINSOCK_INCLUDE_DIRS}")
 find_library(WINSOCK_LIBRARIES ws2_32
   PATHS ${WINSOCK_LIBRARY_PATHS}
   NO_DEFAULT_PATH
 )
+message(STATUS "WINSOCK_LIBRARIES ${WINSOCK_LIBRARIES}")
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(WinSock DEFAULT_MSG WINSOCK_LIBRARIES WINSOCK_INCLUDE_DIRS)
 mark_as_advanced(WINSOCK_INCLUDE_DIRS WINSOCK_LIBRARIES)
