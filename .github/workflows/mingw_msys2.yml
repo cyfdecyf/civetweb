@@ -12,8 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         include: [
-            { msystem: MINGW64, kind: static, arch: x86_64, prefix: /mingw64 },
-            { msystem: MINGW64, kind: shared, arch: x86_64, prefix: /mingw64 },
+            { msystem: MINGW64 },
+            { msystem: MINGW64 },
         ]
 
     steps:
@@ -25,7 +25,9 @@ jobs:
         with:
           msystem: ${{ matrix.msystem }}
           update: true
-          install: git make base-devel
+          install: >-
+            git
+            make
           pacboy: >-
             toolchain:p
             cmake:p
@@ -34,5 +36,5 @@ jobs:
       - name: Build
         shell: msys2 {0}
         run: |
-          cmake -B build -DCMAKE_BUILD_TYPE=Release -G "MSYS Makefiles"
-          cmake --build build
+          cmake -B build_dir -DCMAKE_BUILD_TYPE=Release -G "MSYS Makefiles"
+          cmake --build build_dir
