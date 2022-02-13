@@ -403,6 +403,9 @@ if (CIVETWEB_ENABLE_CXX)
   add_cxx_compiler_flag(--coverage COVERAGE)
 endif()
 
+# Try to fix qsort_r not defined error.
+add_definitions("-D_GNU_SOURCE")
+
 if (NOT ZEPHYR)
   #Warnings: enable everything
   add_c_compiler_flag(-Wall)

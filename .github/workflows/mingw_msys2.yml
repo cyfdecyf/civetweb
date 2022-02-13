@@ -36,5 +36,5 @@ jobs:
       - name: Build
         shell: msys2 {0}
         run: |
-          cmake -B build_dir -DCMAKE_BUILD_TYPE=Release -G "MSYS Makefiles"
+          cmake -B build_dir -DCMAKE_BUILD_TYPE=Release -D_GNU_SOURCE -G "MSYS Makefiles"
           cmake --build build_dir
